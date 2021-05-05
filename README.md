@@ -1,7 +1,6 @@
 # Memory-Efficient-Quadtree-Emulator
 Code to accompany the Memory-efficient emulation of physical tabular data using quadtree decomposition 2021 paper.
 
-# Running the code
 
 ## Creating/formating the interpolation data
 The quadtree emulator expects the input data to be in a python dictionary with the following structure
@@ -39,12 +38,34 @@ d2f_dtemp_dden = -table_values.dsepd  # You could also use: table_values.dpt / t
 Where the notation is `d{function}_d{what it is in terms of}#_d{what it is in terms of}#`, where `#` is the order of derivative for that term. If zero, it is obmitted.
 Functions for transforming, masking, saving, and loading tables are located in the table_functions directory. 
 
-## Creating the memory compact emulator
+## Example Code
+Included in the root repo is an example of how to create an emulator for the sections of the electron-positron Helmholtz free energy as discussed in the paper. 
+The training and test data used both in the paper and in this example is hosted on ***Need to include link*** . 
+To run the example code, modify the following lines to have the correct location of the test and training data. You can also very the depth, targer accuracy, and number of points used in the estimation of the error.
+Note that given the density of the training data, maximum depth of 10 can be used.
+```
+if __name__ == "__main__":
+    # setup table location
+    training_data_location = "Put path to training hdf5 table here"
+    test_data_location = "Put path to testing hdf5 table here"
+    # setup inputs for emulator
+    depth = 7
+    accuracy = 10**-3
+    num_error_estimation_points = 100
+```
 
-## Loading and using the memory compact emulator
+Currently only two interpolation schemes are fully implemented in the code, 'bi-quintic_enhanced' and 'bi-quintic_enhanced_logSpace', refering to the linear-space and log-space model classes presented in the paper. 
+To change which to use edit the models list when the quadtree is setup on lines
+```
+# setup quadtree
+err_bound = accuracy
+masked_table = mask(training_data)
+models = ['bi-quintic_enhanced', 'bi-quintic_enhanced_logSpace']
+grid = build_quadtree(err_bound, depth, masked_table, models, normalize_error=True,
+                      err_bounds=[-15, 0], estimate_error=num_error_estimation_points)
+```
 
-# Modifying the code
-
-## Adding different interpolation schemes
-
-
+Running this example will produce 4 quadtree emulators, one for each section of the domain. 
+Each section's fit and the corresponding error will also be plotted and displayed. 
+The error over the entire domain, computed from the testing data and four emulators, is also saved and for the default settings should be as follows
+![alt text](https://github.com/Carlson-J/Memory-Efficient-Quadtree-Emulator/blob/main/example_error_plot.png?raw=true)
