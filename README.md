@@ -33,11 +33,11 @@ table = {
     }
 }
 ```
-Functions for loading, saving, and manipulating tables that are in this format and saved in hdf5 files are given in the table_function folder.
+Functions for transforming, masking, saving, and loading tables are located in the table_functions directory. 
 
 As a proxy problem, we use the electron-positron Helmholtz free energy. We use the exact EOS function [here](https://github.com/jschwab/python-helmholtz), which gives python bindings to the fortran code written by [Frank Timmes](http://cococubed.asu.edu/code_pages/eos.shtml). From this EOS we compute the electron-positron Helmholtz free energy and its many derivatives and save them in an hdf5 file with a directory format, heretofore refered to as a table. This format is assumed through the code. The compute the free energy from the EOS we use the following 
 ```
-helmholtz.eosfxt(dens=den, temp=temp, abar=1.0, zbar=1.0)
+table_values = helmholtz.eosfxt(dens=den, temp=temp, abar=1.0, zbar=1.0)
 f = ((table_values.eele + table_values.epos) - table_values.temp * (table_values.spos + table_values.sele))
 # Save derivative information. See http://cococubed.asu.edu/code_pages/eos.shtml
 # Save the derivative of the helmholtz free energy in terms of temp and density
@@ -48,14 +48,14 @@ d2f_dtemp2 = -table_values.dsept
 d2f_dtemp_dden = -table_values.dsepd  # You could also use: table_values.dpt / table_values.den**2
 ```
 Where the notation is `d{function}_d{what it is in terms of}#_d{what it is in terms of}#`, where `#` is the order of derivative for that term. If zero, it is obmitted.
-Functions for transforming, masking, saving, and loading tables are located in the table_functions directory. 
+
 
 ## Example Code
 Included in the root repo is an example of how to create an emulator for the sections of the electron-positron Helmholtz free energy as discussed in the paper. 
-The training and test data used both in the paper and in this example is hosted on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4739173.svg)](https://doi.org/10.5281/zenodo.4739173)
+The training and test datasets used both in the paper and in this example are hosted on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4739173.svg)](https://doi.org/10.5281/zenodo.4739173)
 . 
-To run the example code, modify the following lines to have the correct location of the test and training data. You can also very the depth, targer accuracy, and number of points used in the estimation of the error.
-Note that given the density of the training data, maximum depth of 10 can be used.
+To run the example code, modify the following lines to have the correct location of the test and training datasets. You can also very the depth, targer accuracy, and number of points used in the estimation of the error.
+Note that for the referenced datasets a maximum depth of 10 can be used.
 ```
 if __name__ == "__main__":
     # setup table location
@@ -79,6 +79,7 @@ grid = build_quadtree(err_bound, depth, masked_table, models, normalize_error=Tr
 ```
 
 Running this example will produce 4 quadtree emulators, one for each section of the domain. 
+These four emulators for the default settings are included in the root directory of the repo for reference.
 Each section's fit and the corresponding error will also be plotted and displayed. 
-The error over the entire domain, computed from the testing data and four emulators, is also saved and for the default settings should be as follows
+The error over the entire domain is also saved, which is computed from the testing data and four emulators. For the default settings the results are as follows
 ![alt text](https://github.com/Carlson-J/Memory-Efficient-Quadtree-Emulator/blob/main/example_error_plot.png?raw=true)
