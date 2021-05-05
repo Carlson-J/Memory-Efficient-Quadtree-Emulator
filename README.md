@@ -52,7 +52,8 @@ Functions for transforming, masking, saving, and loading tables are located in t
 
 ## Example Code
 Included in the root repo is an example of how to create an emulator for the sections of the electron-positron Helmholtz free energy as discussed in the paper. 
-The training and test data used both in the paper and in this example is hosted on Zenodo with ORCID 10.5281/zenodo.4739173. 
+The training and test data used both in the paper and in this example is hosted on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4739173.svg)](https://doi.org/10.5281/zenodo.4739173)
+. 
 To run the example code, modify the following lines to have the correct location of the test and training data. You can also very the depth, targer accuracy, and number of points used in the estimation of the error.
 Note that given the density of the training data, maximum depth of 10 can be used.
 ```
