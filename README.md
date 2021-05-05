@@ -4,6 +4,26 @@ Code to accompany the Memory-efficient emulation of physical tabular data using 
 # Running the code
 
 ## Creating/formating the interpolation data
+The quadtree emulator expects the input data to be in a python dictionary with the following structure
+```
+table = {
+'den': (2d-array) x values in linear space
+  'temp': (2d-array) y values in linear space
+  'Table_Values': {
+    'f': (2d-array) function values
+    'df_dtemp': (2d-array)
+    'df_dden': (2d-array)
+    'd2f_dtemp_dden': (2d-array)
+    'd2f_dtemp2': (2d-array)
+    'd2f_dden2': (2d-array)
+    'd3f_dtemp2_dden': (2d-array)
+    'd3f_dden2_dtemp': (2d-array)
+    'd4f_dtemp2_dden2': (2d-array)
+    }
+}
+```
+Functions for loading, saving, and manipulating tables that are in this format and saved in hdf5 files are given in the table_function folder.
+
 As a proxy problem, we use the electron-positron Helmholtz free energy. We use the exact EOS function [here](https://github.com/jschwab/python-helmholtz), which gives python bindings to the fortran code written by [Frank Timmes](http://cococubed.asu.edu/code_pages/eos.shtml). From this EOS we compute the electron-positron Helmholtz free energy and its many derivatives and save them in an hdf5 file with a directory format, heretofore refered to as a table. This format is assumed through the code. The compute the free energy from the EOS we use the following 
 ```
 helmholtz.eosfxt(dens=den, temp=temp, abar=1.0, zbar=1.0)
