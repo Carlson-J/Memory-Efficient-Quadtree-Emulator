@@ -1,6 +1,18 @@
 # Memory-Efficient-Quadtree-Emulator
 Code to accompany the Memory-efficient emulation of physical tabular data using quadtree decomposition 2021 paper.
 
+## Needed python modules
+```
+os
+sys
+numpy
+matplotlib
+copy
+h5py
+numba
+random
+findiff
+```
 
 ## Creating/formating the interpolation data
 The quadtree emulator expects the input data to be in a python dictionary with the following structure
