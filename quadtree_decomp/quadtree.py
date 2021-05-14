@@ -326,7 +326,7 @@ class Region:
         :param ax:
         :return:
         """
-        x_array, y_array = self.data.get_xy_array(self.mask)
+        x_array, y_array = self.get_xy_array(self.mask)
         model_type = Region.get_model_name(self.data.region_fits[self.region])
         i = self.data.models.index(model_type)
         Z = np.ones([len(y_array), len(x_array)]) * i
